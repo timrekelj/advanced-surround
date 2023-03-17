@@ -1,22 +1,51 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+"use strict";
 import * as vscode from 'vscode';
 
 // This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "surround-advanced" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('surround-advanced.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello world');
+	let disposable = vscode.commands.registerCommand('surround-advanced.surround', async () => {
+
+		let editor = vscode.window.activeTextEditor;
+
+		if (!editor) {
+			vscode.window.showErrorMessage('No active text editor');
+			return;
+		}
+
+		let surround_with = (await vscode.window.showInputBox()) as string; 
+
+		if (!surround_with) {
+			vscode.window.showErrorMessage('No input from user');
+			return;
+		}
+
+		let surround_prefix = surround_with
+			.replace(" )", "( ")
+			.replace(" ]", "[ ")
+            .replace(" }", "{ ")
+			.replace(")", "(")
+			.replace("]", "[")
+			.replace("}", "{");
+		let surround_postfix = surround_with
+			.replace("( ", " )")
+			.replace("[ ", " ]")
+			.replace("{ ", " }")
+			.replace("(", ")")
+			.replace("[", "]")
+			.replace("{", "}");
+		let selections = editor.selections;
+		
+		editor!.edit((builder) => {
+			selections.forEach((selection) => {
+				let prefixPos = !selection.isReversed ? selection.anchor : selection.active;
+				let postfixPos = !selection.isReversed ? selection.active : selection.anchor;
+
+				builder.insert(prefixPos, surround_prefix);
+				builder.insert(postfixPos, surround_postfix);
+			});
+		});
 	});
 
 	context.subscriptions.push(disposable);

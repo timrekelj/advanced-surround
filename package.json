@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "surround-advanced.helloWorld",
-        "title": "Hello World"
+        "command": "surround-advanced.surround",
+        "title": "Surround"
       }
     ]
   },

@@ -7,7 +7,7 @@
     "vscode": "^1.76.0"
   },
   "categories": [
-    "Other"
+    "Formatters"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",

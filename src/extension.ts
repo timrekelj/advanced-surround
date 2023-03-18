@@ -14,21 +14,21 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		let surround_with = (await vscode.window.showInputBox()) as string; 
+		let surroundWith = (await vscode.window.showInputBox()) as string; 
 
-		if (!surround_with) {
+		if (!surroundWith) {
 			vscode.window.showErrorMessage('No input from user');
 			return;
 		}
 
-		let surround_prefix = surround_with
+		let surroundPrefix = surroundWith
 			.replace(" )", "( ")
 			.replace(" ]", "[ ")
             .replace(" }", "{ ")
 			.replace(")", "(")
 			.replace("]", "[")
 			.replace("}", "{");
-		let surround_postfix = surround_with
+		let surroundPostfix = surroundWith
 			.replace("( ", " )")
 			.replace("[ ", " ]")
 			.replace("{ ", " }")
@@ -42,9 +42,14 @@ export function activate(context: vscode.ExtensionContext) {
 				let prefixPos = !selection.isReversed ? selection.anchor : selection.active;
 				let postfixPos = !selection.isReversed ? selection.active : selection.anchor;
 
-				builder.insert(prefixPos, surround_prefix);
-				builder.insert(postfixPos, surround_postfix);
+				builder.insert(prefixPos, surroundPrefix);
+				builder.insert(postfixPos, surroundPostfix);
 			});
+		})
+		.then(success => {
+			var position = editor!.selection.end;
+			editor!.selection = new vscode.Selection(position, position);
+			vscode.commands.executeCommand('extension.vim_escape');
 		});
 	});
 

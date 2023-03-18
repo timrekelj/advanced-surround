@@ -45,11 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
 				builder.insert(prefixPos, surroundPrefix);
 				builder.insert(postfixPos, surroundPostfix);
 			});
-		})
-		.then(success => {
+		}).then(success => {
 			var position = editor!.selection.end;
-			editor!.selection = new vscode.Selection(position, position);
+			// TODO: check if vim extension is installed (test if this is even an issue)
 			vscode.commands.executeCommand('extension.vim_escape');
+			editor!.selection = new vscode.Selection(position, position);
 		});
 	});
 

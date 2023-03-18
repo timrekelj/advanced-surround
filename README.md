@@ -4,7 +4,7 @@ This is a VS Code extension, made to bring more advanced surround functionalitie
 
 ## Features
 
-- [ ] add surround
+- [x] add surround
 - [ ] remove surround
 - [ ] change surround
 - [ ] better README

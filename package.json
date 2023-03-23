@@ -2,6 +2,7 @@
   "name": "surround-advanced",
   "displayName": "Surround advanced",
   "description": " VS Code extension, made to bring more advanced surround functionalities to VS Code. It would enable user to surround selection(s), remove surround or change them.",
+  "publisher": "Tim Rekelj",
   "repository": {
     "url": "https://github.com/timrekelj/advanced-surround/"
   },

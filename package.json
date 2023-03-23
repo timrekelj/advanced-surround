@@ -18,7 +18,13 @@
     "commands": [
       {
         "command": "surround-advanced.surround",
-        "title": "Surround"
+        "title": "Add surround"
+      },{
+        "command": "surround-advanced.remove-surround",
+        "title": "Remove surround"
+      },{
+        "command": "surround-advanced.replace-surround",
+        "title": "Replace surround"
       }
     ]
   },

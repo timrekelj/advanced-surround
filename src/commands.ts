@@ -48,7 +48,31 @@ export async function addSurround() {
 }
 
 export async function removeSurround() {
-    vscode.window.showErrorMessage('Work in progress...');
+    let editor = vscode.window.activeTextEditor;
+
+    if (!editor) {
+        vscode.window.showErrorMessage('No active text editor');
+        return;
+    }
+
+    let selections = editor.selections;
+
+    editor!.edit((builder) => {
+        selections.forEach((selection) => {
+            if (selection.isEmpty) {
+                return;
+            }
+            let deleteLen = 0;
+            let startRange = new vscode.Range(selection.start, new vscode.Position(selection.start.line, selection.start.character + 1));
+            let endRange = new vscode.Range(selection.end, new vscode.Position(selection.end.line, selection.end.character - 1));
+
+            builder.delete(startRange);
+            builder.delete(endRange);
+        });
+    }).then(_ => {
+        // TODO: check if vim extension is installed (test if this is even an issue)
+        vscode.commands.executeCommand('extension.vim_escape');
+    });
 }
 
 export async function replaceSurround() {

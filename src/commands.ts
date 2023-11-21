@@ -1,5 +1,39 @@
 import * as vscode from 'vscode';
 
+function getSurroundRange(selection: vscode.Selection): {startRange: vscode.Range, endRange: vscode.Range, error: number} {
+    let editor = vscode.window.activeTextEditor;
+
+    let startRange = new vscode.Range(selection.start, new vscode.Position(selection.start.line, selection.start.character + 1));
+    let endRange = new vscode.Range(selection.end, new vscode.Position(selection.end.line, selection.end.character - 1));
+
+    let counterStart = 1;
+    let counterEnd = 1;
+
+    while (true) {
+        if (editor?.document.getText(startRange) === " ") {
+            console.log("start: " + editor?.document.getText(startRange));
+            startRange = new vscode.Range(
+                new vscode.Position(selection.start.line, selection.start.character + counterStart),
+                new vscode.Position(selection.start.line, selection.start.character + counterStart + 1)
+            );
+            counterStart++;
+            continue;
+        }
+        if (editor?.document.getText(endRange) === " ") {
+            console.log("end: " + editor?.document.getText(endRange));
+            endRange = new vscode.Range(
+                new vscode.Position(selection.end.line, selection.end.character - counterEnd),
+                new vscode.Position(selection.end.line, selection.end.character - counterEnd - 1)
+            );
+            counterEnd++;
+            continue;
+        }
+        break;
+    }
+
+    return {startRange, endRange, error: 0};
+}
+
 export async function addSurround() {
     let editor = vscode.window.activeTextEditor;
 
@@ -18,17 +52,23 @@ export async function addSurround() {
     let surroundPrefix = surroundWith
         .replace(" )", "( ")
         .replace(" ]", "[ ")
+        .replace(" ]]", "[[ ")
         .replace(" }", "{ ")
+        .replace(" }}", "{{ ")
         .replace(")", "(")
         .replace("]", "[")
-        .replace("}", "{");
+        .replace("}", "{")
+        .replace(">", "<");
     let surroundPostfix = surroundWith
         .replace("( ", " )")
         .replace("[ ", " ]")
+        .replace("[[ ", " ]]")
         .replace("{ ", " }")
+        .replace("{{ ", " }}")
         .replace("(", ")")
         .replace("[", "]")
-        .replace("{", "}");
+        .replace("{", "}")
+        .replace("<", ">");
     let selections = editor.selections;
 
     editor!.edit((builder) => {
@@ -41,7 +81,6 @@ export async function addSurround() {
         });
     }).then(_ => {
         var position = editor!.selection.end;
-        // TODO: check if vim extension is installed (test if this is even an issue)
         vscode.commands.executeCommand('extension.vim_escape');
         editor!.selection = new vscode.Selection(position, position);
     });
@@ -62,15 +101,13 @@ export async function removeSurround() {
             if (selection.isEmpty) {
                 return;
             }
-            let deleteLen = 0;
-            let startRange = new vscode.Range(selection.start, new vscode.Position(selection.start.line, selection.start.character + 1));
-            let endRange = new vscode.Range(selection.end, new vscode.Position(selection.end.line, selection.end.character - 1));
 
+            let { startRange, endRange } = getSurroundRange(selection);
+            
             builder.delete(startRange);
             builder.delete(endRange);
         });
     }).then(_ => {
-        // TODO: check if vim extension is installed (test if this is even an issue)
         vscode.commands.executeCommand('extension.vim_escape');
     });
 }

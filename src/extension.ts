@@ -3,7 +3,7 @@ import {
 	addSurround,
 	removeSurround,
 	replaceSurround
-} from './commands'
+} from './commands';
 import * as vscode from 'vscode';
 
 // This method is called when your extension is activated

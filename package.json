@@ -7,7 +7,7 @@
   "repository": {
     "url": "https://github.com/timrekelj/advanced-surround/"
   },
-  "version": "0.0.3",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.76.0"
   },
@@ -21,12 +21,31 @@
       {
         "command": "surround-advanced.surround",
         "title": "Add surround"
-      },{
+      },
+      {
         "command": "surround-advanced.remove-surround",
         "title": "Remove surround"
-      },{
+      },
+      {
         "command": "surround-advanced.replace-surround",
         "title": "Replace surround"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "surround-advanced.surround",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+option+a"
+      },
+      {
+        "command": "surround-advanced.remove-surround",
+        "key": "ctrl+alt+x",
+        "mac": "cmd+option+x"
+      },
+      {
+        "command": "surround-advanced.replace-surround",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+option+r"
       }
     ]
   },
@@ -35,20 +54,19 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/vscode": "^1.76.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
+    "@types/node": "^16.18.61",
+    "@types/vscode": "^1.76.0",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
+    "@vscode/test-electron": "^2.2.3",
     "eslint": "^8.34.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
-    "typescript": "^4.9.5",
-    "@vscode/test-electron": "^2.2.3"
+    "typescript": "^4.9.5"
   }
 }
